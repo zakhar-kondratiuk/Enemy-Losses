@@ -8,8 +8,8 @@
 import Foundation
 
 struct EquipmentLosses: Decodable {
-//    let date: Date?
-    var day: Int?
+    let date: String?
+    let day: Int?
     let aircraft: Int?
     let helicopter: Int?
     let tank: Int?
@@ -28,8 +28,7 @@ struct EquipmentLosses: Decodable {
     let greatestLossesDirection: String?
     
     enum CodingKeys: String, CodingKey {
-        case day
-        case aircraft, helicopter, tank, drone
+        case date, day, aircraft, helicopter, tank, drone
         case apc = "APC"
         case fieldArtillery = "field artillery"
         case mrl = "MRL"
@@ -46,14 +45,14 @@ struct EquipmentLosses: Decodable {
 }
 
 
-
 struct PersonnelLosses: Decodable {
+    let date: String?
     let day: Int
     let personnel: Int
     let prisoner: Int?
     
     enum CodingKeys: String, CodingKey {
-        case day, personnel
+        case date, day, personnel
         case prisoner = "POW"
     }
 }
@@ -61,32 +60,29 @@ struct PersonnelLosses: Decodable {
 extension EquipmentLosses: Encodable {
     init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
-        do {
-            if let int = try? values.decode(Int.self, forKey: .day) {
-                day = int
-            }
-            else if let str = try? values.decode(String.self, forKey: .day){
-                    day = Int(str)
-            }
-            aircraft = try? values.decode(Int.self, forKey: .aircraft)
-            helicopter = try? values.decode(Int.self, forKey: .helicopter)
-            tank = try? values.decode(Int.self, forKey: .tank)
-            apc = try? values.decode(Int.self, forKey: .apc)
-            fieldArtillery = try? values.decode(Int.self, forKey: .fieldArtillery)
-            mrl = try? values.decode(Int.self, forKey: .mrl)
-            militaryAuto = try? values.decode(Int.self, forKey: .militaryAuto)
-            fuelTank = try? values.decode(Int.self, forKey: .fuelTank)
-            vehiclesAndFuelTanks = try? values.decode(Int.self, forKey: .vehiclesAndFuelTanks)
-            drone = try? values.decode(Int.self, forKey: .drone)
-            navalShip = try? values.decode(Int.self, forKey: .navalShip)
-            antiAircraftWarfare = try? values.decode(Int.self, forKey: .antiAircraftWarfare)
-            specialEquipment = try? values.decode(Int.self, forKey: .specialEquipment)
-            mobileSRBMsystem = try? values.decode(Int.self, forKey: .mobileSRBMsystem)
-            cruiseMissiles = try? values.decode(Int.self, forKey: .cruiseMissiles)
-            greatestLossesDirection = try? values.decode(String.self, forKey: .greatestLossesDirection)
-        } catch(let error) {
-            print(error)
+        
+        date = try? values.decode(String.self, forKey: .date)
+        if let str = try? values.decode(String.self, forKey: .day) {
+            day = Int(str)
+        } else {
+            day = try? values.decode(Int.self, forKey: .day)
         }
+        aircraft = try? values.decode(Int.self, forKey: .aircraft)
+        helicopter = try? values.decode(Int.self, forKey: .helicopter)
+        tank = try? values.decode(Int.self, forKey: .tank)
+        apc = try? values.decode(Int.self, forKey: .apc)
+        fieldArtillery = try? values.decode(Int.self, forKey: .fieldArtillery)
+        mrl = try? values.decode(Int.self, forKey: .mrl)
+        militaryAuto = try? values.decode(Int.self, forKey: .militaryAuto)
+        fuelTank = try? values.decode(Int.self, forKey: .fuelTank)
+        vehiclesAndFuelTanks = try? values.decode(Int.self, forKey: .vehiclesAndFuelTanks)
+        drone = try? values.decode(Int.self, forKey: .drone)
+        navalShip = try? values.decode(Int.self, forKey: .navalShip)
+        antiAircraftWarfare = try? values.decode(Int.self, forKey: .antiAircraftWarfare)
+        specialEquipment = try? values.decode(Int.self, forKey: .specialEquipment)
+        mobileSRBMsystem = try? values.decode(Int.self, forKey: .mobileSRBMsystem)
+        cruiseMissiles = try? values.decode(Int.self, forKey: .cruiseMissiles)
+        greatestLossesDirection = try? values.decode(String.self, forKey: .greatestLossesDirection)
     }
 
 }
